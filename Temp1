@@ -1,0 +1,1583 @@
+<!DOCTYPE html>
+<html lang="fa" class="scroll-smooth" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>آنجلا - آموزش زبان انگلیسی با احساس</title>
+
+    <!-- Preload critical resources -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: {
+                            50: '#fef2f2',
+                            100: '#fee2e2',
+                            200: '#fecaca',
+                            300: '#fca5a5',
+                            400: '#f87171',
+                            500: '#ef4444',
+                            600: '#dc2626',
+                            700: '#b91c1c',
+                            800: '#991b1b',
+                            900: '#7f1d1d',
+                        },
+                        secondary: {
+                            50: '#fff7ed',
+                            100: '#ffedd5',
+                            200: '#fed7aa',
+                            300: '#fdba74',
+                            400: '#fb923c',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            700: '#c2410c',
+                            800: '#9a3412',
+                            900: '#7c2d12',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Vazirmatn', 'sans-serif'],
+                        serif: ['Playfair Display', 'serif'],
+                    },
+                    animation: {
+                        'pulse-slow': 'pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'glow': 'glow 4s ease-in-out infinite alternate',
+                        'bounce-slow': 'bounce 5s infinite',
+                    },
+                    keyframes: {
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        glow: {
+                            '0%': { boxShadow: '0 0 5px #fef3c7, 0 0 10px #fef3c7, 0 0 15px #fef3c7' },
+                            '100%': { boxShadow: '0 0 10px #fef3c7, 0 0 20px #fef3c7, 0 0 30px #fef3c7' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Alpine.js -->
+    <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
+
+    <!-- GSAP -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/TextPlugin.min.js"></script>
+
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+
+    <style type="text/css">
+        :root {
+            --primary: #dc2626;
+            --primary-light: #f87171;
+            --secondary: #f97316;
+            --glass: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --dark-text: #1f2937;
+            --light-text: #f8fafc;
+        }
+
+        body {
+            font-family: 'Vazirmatn', sans-serif;
+            color: var(--dark-text);
+            background: linear-gradient(135deg, #fef3c7 0%, #fef2f2 50%, #fed7aa 100%);
+            overflow-x: hidden;
+        }
+
+        .glass {
+            background: var(--glass);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--glass-border);
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+        }
+
+        .text-gradient {
+            background: linear-gradient(135deg, #dc2626 0%, #ea580c 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .card-hover {
+            transition: all 0.3s ease;
+        }
+
+        .card-hover:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .language-toggle {
+            position: relative;
+            width: 80px;
+            height: 36px;
+        }
+
+        .language-toggle-checkbox {
+            display: none;
+        }
+
+        .language-toggle-label {
+            display: block;
+            width: 100%;
+            height: 100%;
+            background: var(--glass);
+            border-radius: 9999px;
+            position: relative;
+            cursor: pointer;
+            border: 1px solid var(--glass-border);
+            transition: all 0.3s ease;
+        }
+
+        .language-toggle-label:after {
+            content: '';
+            position: absolute;
+            top: 2px;
+            right: 2px;
+            width: 30px;
+            height: 30px;
+            background: white;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .language-toggle-checkbox:checked + .language-toggle-label {
+            background: rgba(239, 68, 68, 0.3);
+        }
+
+        .language-toggle-checkbox:checked + .language-toggle-label:after {
+            right: calc(100% - 32px);
+        }
+
+        .language-text {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--dark-text);
+        }
+
+        .language-text.en {
+            left: 10px;
+        }
+
+        .language-text.fa {
+            right: 10px;
+        }
+
+        .navbar {
+            transition: all 0.4s ease;
+            padding: 1rem 0;
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            z-index: 100;
+            background: rgba(255, 255, 255, 0);
+            backdrop-filter: blur(0px);
+        }
+
+        .navbar.shrink {
+            padding: 0.5rem 0;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(12px);
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar.shrink .logo-text {
+            color: #dc2626;
+        }
+
+        .navbar.shrink nav a {
+            color: #4b5563;
+        }
+
+        .navbar.shrink nav a:hover {
+            color: #dc2626;
+        }
+
+        .video-container {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -1;
+        }
+
+        .video-container video {
+            min-width: 100%;
+            min-height: 100%;
+            object-fit: cover;
+        }
+
+        .video-overlay {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, rgba(220, 38, 38, 0.7) 0%, rgba(249, 115, 22, 0.7) 100%);
+        }
+
+        .testimonial-card {
+            flex: 0 0 auto;
+            width: 350px;
+            scroll-snap-align: start;
+        }
+
+        .section-transition {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.6s ease;
+        }
+
+        .section-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .floating-shape {
+            position: absolute;
+            border-radius: 50%;
+            opacity: 0.1;
+            z-index: 0;
+        }
+
+        .floating-shape-1 {
+            width: 300px;
+            height: 300px;
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            top: 10%;
+            right: 5%;
+            animation: float 15s ease-in-out infinite;
+        }
+
+        .floating-shape-2 {
+            width: 200px;
+            height: 200px;
+            background: linear-gradient(135deg, #f97316 0%, #ef4444 100%);
+            bottom: 20%;
+            left: 10%;
+            animation: float 12s ease-in-out infinite reverse;
+        }
+
+        .content-card {
+            position: relative;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .content-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.05) 0%, rgba(249, 115, 22, 0.05) 100%);
+            z-index: -1;
+        }
+
+        .content-card:hover::before {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(249, 115, 22, 0.1) 100%);
+        }
+
+        .sticky-nav {
+            position: sticky;
+            top: 100px;
+            z-index: 10;
+        }
+
+        .sticky-nav a {
+            transition: all 0.3s ease;
+        }
+
+        .sticky-nav a.active {
+            color: #dc2626;
+            transform: translateX(-5px);
+        }
+
+        .gradient-border {
+            position: relative;
+            border: double 2px transparent;
+            background-image: linear-gradient(white, white),
+                              linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+        }
+
+        .gradient-border-glass {
+            position: relative;
+            border: double 2px transparent;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.1)),
+                              linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            background-origin: border-box;
+            background-clip: padding-box, border-box;
+            backdrop-filter: blur(12px);
+        }
+
+        .progress-bar {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 0%;
+            height: 4px;
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            z-index: 9999;
+            transition: width 0.2s ease;
+        }
+
+        .nav-link {
+            position: relative;
+            padding: 0.5rem 0;
+        }
+
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 0;
+            height: 2px;
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            transition: width 0.3s ease;
+        }
+
+        .nav-link:hover::after, .nav-link.active::after {
+            width: 100%;
+        }
+
+        /* New styles for enhanced UI */
+        .lesson-category {
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .lesson-category:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+
+        .lesson-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        .lesson-content.open {
+            max-height: 500px;
+        }
+
+        .testimonial-slider {
+            overflow: hidden;
+            position: relative;
+        }
+
+        .testimonial-inner {
+            display: flex;
+            transition: transform 0.5s ease;
+        }
+
+        .testimonial-control {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            z-index: 10;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .testimonial-control.prev {
+            right: 10px;
+        }
+
+        .testimonial-control.next {
+            left: 10px;
+        }
+
+        .newsletter-input {
+            border: none;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 12px 20px;
+            color: white;
+            width: 100%;
+        }
+
+        .newsletter-input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        .newsletter-input:focus {
+            outline: none;
+            box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.3);
+        }
+
+        .social-icon {
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-3px) scale(1.1);
+        }
+
+        /* Improved Mobile Navigation */
+        .mobile-nav-overlay {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100vh;
+            background: rgba(198, 198, 198, 0.8);
+            backdrop-filter: blur(5px);
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .mobile-nav-content {
+            background: linear-gradient(135deg, #ef4444 0%, #f97316 100%);
+            border-radius: 20px;
+            padding: 2rem;
+            width: 85%;
+            max-width: 400px;
+            transform: translateY(20px);
+            transition: transform 0.3s ease;
+        }
+
+        .mobile-nav-overlay.active .mobile-nav-content {
+            transform: translateY(0);
+        }
+
+        .mobile-nav-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .mobile-nav-links {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .mobile-nav-link {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 12px;
+            color: white;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .mobile-nav-link:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(-5px);
+        }
+
+        .mobile-nav-link i {
+            margin-left: 12px;
+            width: 20px;
+            height: 20px;
+        }
+
+        .mobile-nav-close {
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .mobile-nav-close:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* NEW: Enhanced UI elements */
+        .typing-demo {
+            width: 22ch;
+            animation: typing 2s steps(22), blink .5s step-end infinite alternate;
+            white-space: nowrap;
+            overflow: hidden;
+            border-left: 3px solid;
+            display: inline-block;
+        }
+
+        @keyframes typing {
+            from { width: 0 }
+        }
+
+        @keyframes blink {
+            50% { border-color: transparent }
+        }
+
+        .hover-lift {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .hover-lift:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+
+        .parallax-element {
+            transition: transform 0.1s ease;
+        }
+
+        .text-stroke {
+            -webkit-text-stroke: 1px #fff;
+            color: transparent;
+        }
+
+        .gradient-text-animate {
+            background: linear-gradient(135deg, #dc2626 0%, #ea580c 25%, #dc2626 50%, #ea580c 75%, #dc2626 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 200% auto;
+            animation: gradient-text 3s linear infinite;
+        }
+
+        @keyframes gradient-text {
+            to { background-position: 200% center; }
+        }
+
+        .morphing-blob {
+            border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
+            animation: morph 8s ease-in-out infinite;
+        }
+
+        @keyframes morph {
+            0% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+            50% { border-radius: 30% 60% 70% 40% / 50% 60% 30% 60%; }
+            100% { border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%; }
+        }
+
+        /* RTL Support */
+        [dir="rtl"] .language-text.en {
+            left: 10px;
+            right: auto;
+        }
+
+        [dir="rtl"] .language-text.fa {
+            right: 10px;
+            left: auto;
+        }
+
+        [dir="rtl"] .language-toggle-label:after {
+            right: 2px;
+            left: auto;
+        }
+
+        [dir="rtl"] .language-toggle-checkbox:checked + .language-toggle-label:after {
+            right: calc(100% - 32px);
+            left: auto;
+        }
+
+        [dir="rtl"] .nav-link::after {
+            right: 0;
+            left: auto;
+        }
+
+        [dir="rtl"] .mobile-nav-link i {
+            margin-left: 12px;
+            margin-right: 0;
+        }
+
+        [dir="rtl"] .mobile-nav-link:hover {
+            transform: translateX(-5px);
+        }
+
+        [dir="rtl"] .testimonial-control.prev {
+            right: 10px;
+            left: auto;
+        }
+
+        [dir="rtl"] .testimonial-control.next {
+            left: 10px;
+            right: auto;
+        }
+
+        /* Accessibility improvements */
+        .focus-visible:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: 2px;
+        }
+
+        @media (prefers-reduced-motion: reduce) {
+            * {
+                animation-duration: 0.01ms !important;
+                animation-iteration-count: 1 !important;
+                transition-duration: 0.01ms !important;
+            }
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .text-gradient {
+                color: #dc2626 !important;
+                background: none !important;
+                -webkit-text-fill-color: unset !important;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .hero-content h1 {
+                font-size: 2.5rem;
+            }
+
+            .testimonial-control {
+                width: 30px;
+                height: 30px;
+            }
+
+            .floating-shape {
+                display: none;
+            }
+            
+            [dir="rtl"] .testimonial-control.prev {
+                right: 5px;
+            }
+            
+            [dir="rtl"] .testimonial-control.next {
+                left: 5px;
+            }
+        }
+    </style>
+</head>
+<body x-data="{ mobileMenuOpen: false, language: localStorage.getItem('language') || 'fa', activeSection: 'home', currentTestimonial: 0, showModal: false, modalContent: '' }"
+      :class="{ 'overflow-hidden': mobileMenuOpen }"
+      @scroll.window.throttle.100ms="
+        if (window.scrollY > 50) {
+          document.getElementById('navbar').classList.add('shrink')
+        } else {
+          document.getElementById('navbar').classList.remove('shrink')
+        }
+
+        // Update progress bar
+        const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        const scrolled = (winScroll / height) * 100;
+        document.getElementById('progress-bar').style.width = scrolled + '%';
+
+        // Update active section for sticky nav
+        const sections = document.querySelectorAll('section[id]');
+        sections.forEach(section => {
+          const sectionTop = section.offsetTop;
+          const sectionHeight = section.clientHeight;
+          if (window.scrollY >= sectionTop - 100 && window.scrollY < sectionTop + sectionHeight - 100) {
+            activeSection = section.id;
+          }
+        });
+
+        // Show/hide back to top button
+        const backToTop = document.getElementById('back-to-top');
+        if (window.scrollY > 500) {
+            backToTop.classList.remove('opacity-0', 'invisible');
+            backToTop.classList.add('opacity-100', 'visible');
+        } else {
+            backToTop.classList.remove('opacity-100', 'visible');
+            backToTop.classList.add('opacity-0', 'invisible');
+        }
+      ">
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progress-bar"></div>
+
+    <!-- Navigation -->
+    <header id="navbar" class="navbar">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="flex justify-between items-center">
+                <a href="#home" class="flex items-center space-x-2" @click.prevent="mobileMenuOpen = false; scrollToSection('#home')">
+                    <div class="w-10 h-10 rounded-full bg-gradient-to-br from-primary-600 to-secondary-600 flex items-center justify-center text-white font-bold text-xl">آ</div>
+                    <span class="text-xl font-bold text-white logo-text transition-colors duration-300">آنجلا</span>
+                </a>
+
+                <nav class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="nav-link text-white hover:text-white transition-colors font-medium" :class="{ 'active text-white': activeSection === 'home' }" @click.prevent="scrollToSection('#home')">خانه</a>
+                    <a href="#lessons" class="nav-link text-white hover:text-white transition-colors font-medium" :class="{ 'active text-white': activeSection === 'lessons' }" @click.prevent="scrollToSection('#lessons')">دروس</a>
+                    <a href="#methods" class="nav-link text-white hover:text-white transition-colors font-medium" :class="{ 'active text-white': activeSection === 'methods' }" @click.prevent="scrollToSection('#methods')">روش‌ها</a>
+                    <a href="#testimonials" class="nav-link text-white hover:text-white transition-colors font-medium" :class="{ 'active text-white': activeSection === 'testimonials' }" @click.prevent="scrollToSection('#testimonials')">نظرات</a>
+                    <a href="#about" class="nav-link text-white hover:text-white transition-colors font-medium" :class="{ 'active text-white': activeSection === 'about' }" @click.prevent="scrollToSection('#about')">درباره</a>
+                </nav>
+
+                <div class="flex items-center space-x-4">
+                    <!-- Language Toggle -->
+                    <div class="language-toggle ml-4">
+                        <input type="checkbox" id="language-toggle" class="language-toggle-checkbox"
+                               :checked="language === 'en'"
+                               @change="language = language === 'fa' ? 'en' : 'fa'; localStorage.setItem('language', language); updateLanguage()">
+                        <label for="language-toggle" class="language-toggle-label">
+                            <span class="language-text en">EN</span>
+                            <span class="language-text fa">FA</span>
+                        </label>
+                    </div>
+
+                    <button class="hidden md:block bg-white text-primary-600 px-6 py-2 rounded-full hover:shadow-lg transition-all font-medium hover:bg-opacity-90 hover-lift focus-visible">
+                        شروع کنید
+                    </button>
+
+                    <button @click="mobileMenuOpen = !mobileMenuOpen" class="md:hidden text-white focus-visible" aria-label="Toggle menu" :aria-expanded="mobileMenuOpen">
+                        <i data-lucide="menu" x-show="!mobileMenuOpen"></i>
+                        <i data-lucide="x" x-show="mobileMenuOpen"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Improved Mobile Navigation Overlay -->
+    <div class="mobile-nav-overlay" :class="{ 'active': mobileMenuOpen }" x-show="mobileMenuOpen" x-transition @click.self="mobileMenuOpen = false"
+         aria-hidden="true" aria-label="Mobile navigation" role="dialog">
+        <div class="mobile-nav-content">
+            <div class="mobile-nav-header">
+                <div class="flex items-center space-x-2">
+                    <div class="w-10 h-10 rounded-full bg-white flex items-center justify-center text-primary-600 font-bold text-xl">آ</div>
+                    <span class="text-xl font-bold text-white">آنجلا</span>
+                </div>
+                <button @click="mobileMenuOpen = false" class="mobile-nav-close focus-visible" aria-label="Close menu">
+                    <i data-lucide="x"></i>
+                </button>
+            </div>
+
+            <div class="mobile-nav-links">
+                <a href="#home" class="mobile-nav-link focus-visible" @click.prevent="mobileMenuOpen = false; scrollToSection('#home')">
+                    <i data-lucide="home"></i>
+                    <span>خانه</span>
+                </a>
+                <a href="#lessons" class="mobile-nav-link focus-visible" @click.prevent="mobileMenuOpen = false; scrollToSection('#lessons')">
+                    <i data-lucide="book-open"></i>
+                    <span>دروس</span>
+                </a>
+                <a href="#methods" class="mobile-nav-link focus-visible" @click.prevent="mobileMenuOpen = false; scrollToSection('#methods')">
+                    <i data-lucide="lightbulb"></i>
+                    <span>روش‌ها</span>
+                </a>
+                <a href="#testimonials" class="mobile-nav-link focus-visible" @click.prevent="mobileMenuOpen = false; scrollToSection('#testimonials')">
+                    <i data-lucide="message-square"></i>
+                    <span>نظرات</span>
+                </a>
+                <a href="#about" class="mobile-nav-link focus-visible" @click.prevent="mobileMenuOpen = false; scrollToSection('#about')">
+                    <i data-lucide="info"></i>
+                    <span>درباره</span>
+                </a>
+                <button class="mobile-nav-link bg-white text-primary-600 font-semibold justify-center mt-4 hover-lift focus-visible" @click="mobileMenuOpen = false">
+                    <span>شروع کنید</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center relative pt-20 overflow-hidden">
+        <div class="video-container">
+            <!-- Lazy loaded video with placeholder -->
+            <video autoplay muted loop playsinline id="hero-video" preload="none" poster="data:image/gif;base64,R0lGODlhAQABAAAAACH5BAEKAAEALAAAAAABAAEAAAICTAEAOw==">
+                <source data-src="https://assets.mixkit.co/videos/preview/mixkit-waves-in-the-water-1164-large.mp4" type="video/mp4">
+            </video>
+            <div class="video-overlay"></div>
+        </div>
+
+        <!-- Floating shapes -->
+        <div class="floating-shape floating-shape-1"></div>
+        <div class="floating-shape floating-shape-2"></div>
+
+        <div class="container mx-auto px-4 md:px-6 z-10 mt-12">
+            <div class="max-w-4xl mx-auto text-center">
+                <h1 class="text-4xl md:text-6xl font-bold text-white mb-6" data-aos="fade-up">
+                    انگلیسی را با <span class="text-yellow-200 gradient-text-animate">قلب و روح</span> بیاموزید
+                </h1>
+                <p class="text-xl text-white opacity-90 mb-10 max-w-2xl mx-auto" data-aos="fade-up" data-aos-delay="100">
+                    زیبایی احساسی زبان انگلیسی را از طریق رویکرد بیانگر و احساسی ما در یادگیری زبان کشف کنید.
+                </p>
+                <div class="flex flex-col sm:flex-row justify-center gap-4" data-aos="fade-up" data-aos-delay="200">
+                    <button class="bg-white text-primary-600 px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all hover-lift focus-visible">
+                        شروع یادگیری
+                    </button>
+                    <button class="gradient-border-glass text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:bg-opacity-10 transition-all hover-lift focus-visible" @click="showModal = true; modalContent = 'intro'">
+                        تماشای معرفی
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-20 grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto" data-aos="fade-up" data-aos-delay="300">
+                <div class="glass rounded-xl p-4 text-center border border-white border-opacity-30 hover-lift">
+                    <div class="text-2xl font-bold text-white">500+</div>
+                    <div class="text-white opacity-80 text-sm">کلمات احساسی</div>
+                </div>
+                <div class="glass rounded-xl p-4 text-center border border-white border-opacity-30 hover-lift">
+                    <div class="text-2xl font-bold text-white">120+</div>
+                    <div class="text-white opacity-80 text-sm">درس‌های گرامر</div>
+                </div>
+                <div class="glass rounded-xl p-4 text-center border border-white border-opacity-30 hover-lift">
+                    <div class="text-2xl font-bold text-white">2,500+</div>
+                    <div class="text-white opacity-80 text-sm">دانش‌آموزان فعال</div>
+                </div>
+                <div class="glass rounded-xl p-4 text-center border border-white border-opacity-30 hover-lift">
+                    <div class="text-2xl font-bold text-white">98%</div>
+                    <div class="text-white opacity-80 text-sm">میزان رضایت</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="absolute bottom-10 right-1/2 transform translate-x-1/2">
+            <a href="#lessons" class="animate-bounce inline-flex items-center justify-center w-10 h-10 rounded-full glass text-white hover-lift focus-visible" @click.prevent="scrollToSection('#lessons')" aria-label="Scroll to lessons">
+                <i data-lucide="arrow-down"></i>
+            </a>
+        </div>
+    </section>
+
+    <!-- Lessons Section -->
+    <section id="lessons" class="py-20 bg-white bg-opacity-70 relative overflow-hidden">
+        <div class="floating-shape floating-shape-1" style="top: 20%; right: -5%; width: 250px; height: 250px;"></div>
+        <div class="floating-shape floating-shape-2" style="bottom: 10%; left: -5%; width: 180px; height: 180px;"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">دروس انگلیسی احساسی</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">دروس carefully crafted ما را کشف کنید که زبان را با احساس و بیان انسانی مرتبط می‌کنند.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Vocabulary Card -->
+                <div class="rounded-2xl overflow-hidden content-card border border-white border-opacity-30 card-hover hover-lift"
+                     data-aos="fade-up" x-data="{ open: false }">
+                    <div class="p-6">
+                        <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mb-4">
+                            <i data-lucide="book-open"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">واژگان احساسی</h3>
+                        <p class="text-gray-600 mb-4">کلماتی که احساسات، حالات و وضعیت‌های احساسی را با ظرافت و عمق بیان می‌کنند.</p>
+                        <button @click="open = !open" class="flex items-center text-primary-600 font-medium focus-visible">
+                            <span x-text="open ? 'نمایش کمتر' : 'کشف کلمات'"></span>
+                            <i data-lucide="chevron-down" class="mr-1 w-4 h-4 transition-transform" :class="{ 'rotate-180': open }"></i>
+                        </button>
+
+                        <div x-show="open" x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 -translate-y-2" class="mt-4 pt-4 border-t border-gray-200">
+                            <ul class="space-y-2">
+                                <li class="flex items-center">
+                                    <i data-lucide="heart" class="w-4 h-4 text-primary-600 ml-2"></i>
+                                    <span class="text-gray-700">Serendipity - پیدا کردن چیزی زیبا به طور تصادفی</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i data-lucide="heart" class="w-4 h-4 text-primary-600 ml-2"></i>
+                                    <span class="text-gray-700">Melancholy - یک احساس غم توأم با تفکر</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i data-lucide="heart" class="w-4 h-4 text-primary-600 ml-2"></i>
+                                    <span class="text-gray-700">Ethereal - فوق العاده ظریف و سبک</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i data-lucide="heart" class="w-4 h-4 text-primary-600 ml-2"></i>
+                                    <span class="text-gray-700">Resonance - برانگیختن احساسات مشترک</span>
+                                </li>
+                            </ul>
+
+                            <button @click="showModal = true; modalContent = 'vocabulary'" class="mt-4 text-sm text-primary-600 font-medium flex items-center focus-visible">
+                                کشف همه کلمات احساسی
+                                <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Grammar Card -->
+                <div class="rounded-2xl overflow-hidden content-card border border-white border-opacity-30 card-hover hover-lift"
+                     data-aos="fade-up" data-aos-delay="100" x-data="{ open: false }">
+                    <div class="p-6">
+                        <div class="w-12 h-12 rounded-full bg-secondary-100 flex items-center justify-center text-secondary-600 mb-4">
+                            <i data-lucide="pen-tool"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">گرامر بیانگر</h3>
+                        <p class="text-gray-600 mb-4">مسلط شدن به ساختارهای گرامری که به شما در انتقال احساسات و معانی ظریف کمک می‌کنند.</p>
+                        <button @click="open = !open" class="flex items-center text-secondary-600 font-medium focus-visible">
+                            <span x-text="open ? 'نمایش کمتر' : 'یادگیری گرامر'"></span>
+                            <i data-lucide="chevron-down" class="mr-1 w-4 h-4 transition-transform" :class="{ 'rotate-180': open }"></i>
+                        </button>
+
+                        <div x-show="open" x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 -translate-y-2" class="mt-4 pt-4 border-t border-gray-200">
+                            <ul class="space-y-2">
+                                <li class="flex items-center">
+                                    <i data-lucide="star" class="w-4 h-4 text-secondary-600 ml-2"></i>
+                                    <span class="text-gray-700">جملات شرطی برای بیان رویاها و آرزوها</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i data-lucide="star" class="w-4 h-4 text-secondary-600 ml-2"></i>
+                                    <span class="text-gray-700">افعال مدال برای ظرافت و ادب</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i data-lucide="star" class="w-4 h-4 text-secondary-600 ml-2"></i>
+                                    <span class="text-gray-700">جایگاه قید برای تأکید احساسی</span>
+                                </li>
+                                <li class="flex items-center">
+                                    <i data-lucide="star" class="w-4 h-4 text-secondary-600 ml-2"></i>
+                                    <span class="text-gray-700">حالت التزامی برای موقعیت‌های فرضی</span>
+                                </li>
+                            </ul>
+
+                            <button @click="showModal = true; modalContent = 'grammar'" class="mt-4 text-sm text-secondary-600 font-medium flex items-center focus-visible">
+                                کشف همه درس‌های گرامر
+                                <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quotes Card -->
+                <div class="rounded-2xl overflow-hidden content-card border border-white border-opacity-30 card-hover hover-lift"
+                     data-aos="fade-up" data-aos-delay="200" x-data="{ open: false }">
+                    <div class="p-6">
+                        <div class="w-12 h-12 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mb-4">
+                            <i data-lucide="quote"></i>
+                        </div>
+                        <h3 class="text-xl font-semibold text-gray-800 mb-2">نقل‌قول‌های الهام‌بخش</h3>
+                        <p class="text-gray-600 mb-4">نقل‌قول‌های زیبا که ارتباط احساسی با زبان انگلیسی را الهام می‌بخشند.</p>
+                        <button @click="open = !open" class="flex items-center text-yellow-600 font-medium focus-visible">
+                            <span x-text="open ? 'نمایش کمتر' : 'خواندن نقل‌قول‌ها'"></span>
+                            <i data-lucide="chevron-down" class="mr-1 w-4 h-4 transition-transform" :class="{ 'rotate-180': open }"></i>
+                        </button>
+
+                        <div x-show="open" x-transition:enter="transition ease-out duration-300"
+                             x-transition:enter-start="opacity-0 -translate-y-2"
+                             x-transition:enter-end="opacity-100 translate-y-0"
+                             x-transition:leave="transition ease-in duration-200"
+                             x-transition:leave-start="opacity-100 translate-y-0"
+                             x-transition:leave-end="opacity-0 -translate-y-2" class="mt-4 pt-4 border-t border-gray-200">
+                            <blockquote class="text-gray-700 italic mb-2">
+                                "بهترین و زیباترین چیزهای جهان را نمی‌توان دید یا لمس کرد - باید با قلب احساس شوند."
+                            </blockquote>
+                            <p class="text-sm text-gray-600">- هلن کلر</p>
+
+                            <blockquote class="text-gray-700 italic my-4">
+                                "کلمات البته قوی‌ترین داروی مورد استفاده بشر هستند."
+                            </blockquote>
+                            <p class="text-sm text-gray-600">- رودیارد کیپلینگ</p>
+
+                            <button @click="showModal = true; modalContent = 'quotes'" class="mt-4 text-sm text-yellow-600 font-medium flex items-center focus-visible">
+                                کشف نقل‌قول‌های الهام‌بخش بیشتر
+                                <i data-lucide="arrow-left" class="w-4 h-4 mr-1"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-16">
+                <button class="bg-gradient-to-r from-primary-600 to-secondary-600 text-white px-8 py-3 rounded-full font-semibold hover:shadow-lg transition-all hover-lift focus-visible">
+                    کشف همه دروس
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Methods Section -->
+    <section id="methods" class="py-20 bg-gradient-to-br from-primary-50 to-secondary-50 relative overflow-hidden">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">روش‌های تدریس ما</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">ما از رویکردهای نوآورانه و مبتنی بر احساسات برای جذاب‌تر و مؤثرتر کردن یادگیری انگلیسی استفاده می‌کنیم.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="bg-white rounded-2xl p-6 shadow-lg hover-lift" data-aos="fade-up">
+                    <div class="w-14 h-14 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 mb-4">
+                        <i data-lucide="heart"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">ارتباط احساسی</h3>
+                    <p class="text-gray-600">ما یادگیری زبان را با احساسات مرتبط می‌کنیم تا retention را بهبود بخشیم و فرآیند را لذت‌بخش‌تر کنیم.</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-lg hover-lift" data-aos="fade-up" data-aos-delay="100">
+                    <div class="w-14 h-14 rounded-full bg-secondary-100 flex items-center justify-center text-secondary-600 mb-4">
+                        <i data-lucide="users"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">جلسات تعاملی</h3>
+                    <p class="text-gray-600">جلسات گروهی کوچک که گفتگو و بیان احساسی را در یک محیط حمایتی تشویق می‌کنند.</p>
+                </div>
+
+                <div class="bg-white rounded-2xl p-6 shadow-lg hover-lift" data-aos="fade-up" data-aos-delay="200">
+                    <div class="w-14 h-14 rounded-full bg-yellow-100 flex items-center justify-center text-yellow-600 mb-4">
+                        <i data-lucide="sparkles"></i>
+                    </div>
+                    <h3 class="text-xl font-semibold text-gray-800 mb-2">بیان خلاقانه</h3>
+                    <p class="text-gray-600">استفاده از شعر، داستان‌گویی و نقش‌آفرینی برای کشف ابعاد احساسی زبان.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-20 bg-white relative overflow-hidden">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">نظرات دانش‌آموزان ما</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">از زبان یادگیرندگانی بشنوید که مهارت‌های انگلیسی خود را از طریق رویکرد احساسی ما متحول کرده‌اند.</p>
+            </div>
+
+            <div class="testimonial-slider" x-data="{ currentIndex: 0 }">
+                <div class="testimonial-inner" :style="'transform: translateX(-' + currentIndex * 100 + '%)'">
+                    <div class="testimonial-card min-w-full md:min-w-[50%] lg:min-w-[33.333%] p-4">
+                        <div class="bg-gray-50 rounded-2xl p-6 hover-lift">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-bold">م</div>
+                                <div class="mr-4">
+                                    <h4 class="font-semibold">مریم رضایی</h4>
+                                    <p class="text-sm text-gray-500">ایران</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600">"یادگیری با آنجلا دیدگاه من نسبت به انگلیسی را تغییر داد. من دیگر فقط کلمات را بیان نمی‌کنم - احساسات را بیان می‌کنم. اعتماد به نفس من به شدت رشد کرده است!"</p>
+                            <div class="flex mt-4">
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card min-w-full md:min-w-[50%] lg:min-w-[33.333%] p-4">
+                        <div class="bg-gray-50 rounded-2xl p-6 hover-lift">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full bg-secondary-100 flex items-center justify-center text-secondary-600 font-bold">ع</div>
+                                <div class="mr-4">
+                                    <h4 class="font-semibold">علی محمدی</h4>
+                                    <p class="text-sm text-gray-500">ایران</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600">"درس‌های واژگان احساسی به من کمک کرد خودم را به روش‌هایی بیان کنم که هرگز فکر نمی‌کردم در انگلیسی ممکن باشد. اکنون می‌توانم مکالمات عمیق‌تری با دوستان بین‌المللی داشته باشم."</p>
+                            <div class="flex mt-4">
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="testimonial-card min-w-full md:min-w-[50%] lg:min-w-[33.333%] p-4">
+                        <div class="bg-gray-50 rounded-2xl p-6 hover-lift">
+                            <div class="flex items-center mb-4">
+                                <div class="w-12 h-12 rounded-full bg-primary-100 flex items-center justify-center text-primary-600 font-bold">ز</div>
+                                <div class="mr-4">
+                                    <h4 class="font-semibold">زهرا حسینی</h4>
+                                    <p class="text-sm text-gray-500">ایران</p>
+                                </div>
+                            </div>
+                            <p class="text-gray-600">"قبلاً در بیان احساسات ظریف به انگلیسی مشکل داشتم. درس‌های گرامر بیانگر ابزارهایی به من دادند تا دقیقاً آنچه را احساس می‌کنم بیان کنم."</p>
+                            <div class="flex mt-4">
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                                <i data-lucide="star" class="w-4 h-4 text-yellow-400 fill-current"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center mt-8 space-x-4">
+                    <button @click="currentIndex = Math.max(0, currentIndex - 1)" :disabled="currentIndex === 0"
+                            class="w-10 h-10 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center disabled:opacity-50 focus-visible">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                    <button @click="currentIndex = Math.min(2, currentIndex + 1)" :disabled="currentIndex === 2"
+                            class="w-10 h-10 rounded-full bg-primary-100 text-primary-600 flex items-center justify-center disabled:opacity-50 focus-visible">
+                        <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-gradient-to-br from-primary-50 to-secondary-50 relative overflow-hidden">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="flex flex-col md:flex-row items-center gap-12">
+                <div class="md:w-1/2" data-aos="fade-right">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">درباره آنجلا</h2>
+                    <p class="text-gray-600 mb-4">آنجلا فقط یک معلم انگلیسی نیست - او یک راهنمای زبان احساسی با بیش از 10 سال تجربه در کمک به دانش‌آموزان برای ارتباط با انگلیسی در سطحی عمیق‌تر است.</p>
+                    <p class="text-gray-600 mb-6">رویکرد منحصر به فرد او تخصص زبانی را با آموزش هوش هیجانی ترکیب می‌کند و یک تجربه یادگیری ایجاد می‌کند که نحوه تفکر و استفاده شما از انگلیسی را متحول می‌کند.</p>
+                    <div class="flex flex-wrap gap-4">
+                        <div class="flex items-center">
+                            <i data-lucide="award" class="w-5 h-5 text-primary-600 ml-2"></i>
+                            <span class="text-gray-700">گواهینامه TESOL</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="graduation-cap" class="w-5 h-5 text-primary-600 ml-2"></i>
+                            <span class="text-gray-700">کارشناسی ارشد زبانشناسی کاربردی</span>
+                        </div>
+                        <div class="flex items-center">
+                            <i data-lucide="heart" class="w-5 h-5 text-primary-600 ml-2"></i>
+                            <span class="text-gray-700">مربی هوش هیجانی</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:w-1/2 relative" data-aos="fade-left">
+                    <div class="morphing-blob bg-gradient-to-br from-primary-200 to-secondary-200 w-full h-80"></div>
+                    <div class="absolute inset-0 flex items-center justify-center">
+                        <div class="w-64 h-64 rounded-full bg-white shadow-xl flex items-center justify-center">
+                            <div class="w-56 h-56 rounded-full bg-gray-100 flex items-center justify-center text-6xl font-serif text-primary-600">
+                                <b>آ</b>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newsletter Section -->
+    <section class="py-16 bg-primary-600 relative overflow-hidden">
+        <div class="floating-shape floating-shape-1" style="top: 20%; right: -5%; width: 250px; height: 250px; opacity: 0.2;"></div>
+        <div class="floating-shape floating-shape-2" style="bottom: 10%; left: -5%; width: 180px; height: 180px; opacity: 0.2;"></div>
+
+        <div class="container mx-auto px-4 md:px-6 relative z-10">
+            <div class="max-w-3xl mx-auto text-center">
+                <h2 class="text-2xl md:text-3xl font-bold text-white mb-4">به جامعه انگلیسی احساسی ما بپیوندید</h2>
+                <p class="text-primary-100 mb-8">عضویت در خبرنامه برای دریافت واژگان احساسی هفتگی، نکات گرامری بیانگر و محتوای الهام‌بخش.</p>
+
+                <form class="flex flex-col sm:flex-row gap-4" @submit.prevent="subscribeNewsletter">
+                    <input type="email" placeholder="آدرس ایمیل شما" required
+                           class="flex-grow px-6 py-3 rounded-full focus:outline-none focus:ring-2 focus:ring-white focus-visible">
+                    <button type="submit" class="bg-white text-primary-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-all hover-lift focus-visible">
+                        عضویت
+                    </button>
+                </form>
+
+                <p class="text-primary-200 text-sm mt-4">ما حریم خصوصی شما را محترم می‌شماریم. در هر زمان می‌توانید عضویت را لغو کنید.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="container mx-auto px-4 md:px-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-6">
+                        <div class="w-10 h-10 rounded-full bg-primary-600 flex items-center justify-center text-white font-bold text-xl">آ</div>
+                        <span class="text-xl font-bold">آنجلا</span>
+                    </div>
+                    <p class="text-gray-400 mb-6">انگلیسی را با احساس بیاموزید، با اعتماد به نفس خود را بیان کنید.</p>
+                    <div class="flex space-x-4">
+                        <a href="#" class="social-icon text-gray-400 hover:text-white focus-visible">
+                            <i data-lucide="facebook" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="social-icon text-gray-400 hover:text-white focus-visible">
+                            <i data-lucide="instagram" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="social-icon text-gray-400 hover:text-white focus-visible">
+                            <i data-lucide="youtube" class="w-5 h-5"></i>
+                        </a>
+                        <a href="#" class="social-icon text-gray-400 hover:text-white focus-visible">
+                            <i data-lucide="linkedin" class="w-5 h-5"></i>
+                        </a>
+                    </div>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">لینک‌های سریع</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#home" class="text-gray-400 hover:text-white transition-colors focus-visible" @click.prevent="scrollToSection('#home')">خانه</a></li>
+                        <li><a href="#lessons" class="text-gray-400 hover:text-white transition-colors focus-visible" @click.prevent="scrollToSection('#lessons')">دروس</a></li>
+                        <li><a href="#methods" class="text-gray-400 hover:text-white transition-colors focus-visible" @click.prevent="scrollToSection('#methods')">روش‌ها</a></li>
+                        <li><a href="#testimonials" class="text-gray-400 hover:text-white transition-colors focus-visible" @click.prevent="scrollToSection('#testimonials')">نظرات</a></li>
+                        <li><a href="#about" class="text-gray-400 hover:text-white transition-colors focus-visible" @click.prevent="scrollToSection('#about')">درباره</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">منابع</h3>
+                    <ul class="space-y-3">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors focus-visible">بلاگ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors focus-visible">دروس رایگان</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors focus-visible">لیست واژگان</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors focus-visible">راهنماهای گرامر</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition-colors focus-visible">تمرینات عملی</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-lg font-semibold mb-6">تماس با ما</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-start">
+                            <i data-lucide="mail" class="w-5 h-5 text-primary-400 ml-3 mt-1"></i>
+                            <span class="text-gray-400">hello@angela-english.com</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="phone" class="w-5 h-5 text-primary-400 ml-3 mt-1"></i>
+                            <span class="text-gray-400">+1 (555) 123-4567</span>
+                        </li>
+                        <li class="flex items-start">
+                            <i data-lucide="map-pin" class="w-5 h-5 text-primary-400 ml-3 mt-1"></i>
+                            <span class="text-gray-400">123 خیابان زبان، شهر آموزش</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-12 pt-8 text-center text-gray-500 text-sm">
+                <p>© 2023 آنجلا انگلیسی احساسی. تمام حقوق محفوظ است.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <a href="#home" id="back-to-top" class="fixed bottom-6 left-6 w-12 h-12 rounded-full glass border border-white border-opacity-30 flex items-center justify-center text-white hover:bg-primary-600 transition-all z-40 opacity-0 invisible transition-opacity focus-visible" @click.prevent="scrollToSection('#home')" aria-label="Back to top">
+        <i data-lucide="arrow-up"></i>
+    </a>
+
+    <!-- Modal -->
+    <div x-show="showModal" x-transition:enter="transition ease-out duration-300" x-transition:enter-start="opacity-0" x-transition:enter-end="opacity-100"
+         x-transition:leave="transition ease-in duration-200" x-transition:leave-start="opacity-100" x-transition:leave-end="opacity-0"
+         class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 p-4" style="display: none;" @click.self="showModal = false" role="dialog" aria-modal="true" :aria-label="modalContent === 'vocabulary' ? 'واژگان احساسی' : modalContent === 'grammar' ? 'گرامر بیانگر' : modalContent === 'quotes' ? 'نقل‌قول‌های الهام‌بخش' : 'ویدیو معرفی'">
+        <div class="bg-white rounded-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+            <div class="sticky top-0 bg-white p-4 border-b border-gray-200 flex justify-between items-center rounded-t-2xl">
+                <h3 class="text-xl font-semibold" x-text="modalContent === 'vocabulary' ? 'واژگان احساسی' : modalContent === 'grammar' ? 'گرامر بیانگر' : modalContent === 'quotes' ? 'نقل‌قول‌های الهام‌بخش' : 'ویدیو معرفی'"></h3>
+                <button @click="showModal = false" class="text-gray-500 hover:text-gray-700 focus-visible" aria-label="Close modal">
+                    <i data-lucide="x" class="w-6 h-6"></i>
+                </button>
+            </div>
+            <div class="p-6">
+                <template x-if="modalContent === 'vocabulary'">
+                    <div>
+                        <p class="text-gray-600 mb-6">مجموعه‌ای از کلمات واژگان احساسی ما را کشف کنید که به شما کمک می‌کنند خود را به طور دقیق‌تری در انگلیسی بیان کنید.</p>
+                        <div class="grid gap-4">
+                            <div class="p-4 bg-primary-50 rounded-lg">
+                                <h4 class="font-semibold text-primary-800">Serendipity</h4>
+                                <p class="text-gray-700">وقوع و توسعه رویدادها به طور تصادفی به روشی شاد یا مفید.</p>
+                                <p class="text-sm text-primary-600 mt-2">مثال: پیدا کردن کتاب مورد علاقه‌ام در بازار flea، serendipity محض بود.</p>
+                            </div>
+                            <div class="p-4 bg-primary-50 rounded-lg">
+                                <h4 class="font-semibold text-primary-800">Melancholy</h4>
+                                <p class="text-gray-700">یک احساس غم توأم با تفکر، معمولاً بدون دلیل آشکار.</p>
+                                <p class="text-sm text-primary-600 mt-2">مثال: یک زیبایی melancholy در برگ‌های پاییزی falling وجود دارد.</p>
+                            </div>
+                            <div class="p-4 bg-primary-50 rounded-lg">
+                                <h4 class="font-semibold text-primary-800">Ethereal</h4>
+                                <p class="text-gray-700">فوق العاده ظریف و سبک به گونه‌ای که برای این جهان بسیار کامل به نظر می‌رسد.</p>
+                                <p class="text-sm text-primary-600 mt-2">مثال: صدای او کیفیتی etheral داشت که همه را مجذوب خود کرد.</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <template x-if="modalContent === 'grammar'">
+                    <div>
+                        <p class="text-gray-600 mb-6">مسلط شدن به ساختارهای گرامری که عمق و ظرافت احساسی به expressions انگلیسی شما می‌افزایند.</p>
+                        <div class="grid gap-4">
+                            <div class="p-4 bg-secondary-50 rounded-lg">
+                                <h4 class="font-semibold text-secondary-800">جملات شرطی</h4>
+                                <p class="text-gray-700">برای بیان رویاها، آرزوها و موقعیت‌های فرضی با عمق احساسی استفاده می‌شود.</p>
+                                <p class="text-sm text-secondary-600 mt-2">مثال: اگر می‌توانستم خودم را به طور کامل در انگلیسی بیان کنم، احساس آزادی می‌کردم.</p>
+                            </div>
+                            <div class="p-4 bg-secondary-50 rounded-lg">
+                                <h4 class="font-semibold text-secondary-800">افعال مدال</h4>
+                                <p class="text-gray-700">ظرافت، ادب و nuance احساسی به درخواست‌ها و statements شما می‌افزایند.</p>
+                                <p class="text-sm text-secondary-600 mt-2">مثال: ممکن است کمی با所有这些 کلمات جدید احساس overwhelmed کنم.</p>
+                            </div>
+                        </div>
+                    </div>
+                </template>
+
+                <template x-if="modalContent === 'quotes'">
+                    <div>
+                        <p class="text-gray-600 mb-6">در این نقل‌قول‌های زیبا درباره زبان، احساس و بیان الهام بگیرید.</p>
+                        <div class="space-y-6">
+                            <blockquote class="border-r-4 border-yellow-500 pr-4 italic text-gray-700">
+                                "بهترین و زیباترین چیزهای جهان را نمی‌توان دید یا لمس کرد - باید با قلب احساس شوند."
+                                <footer class="mt-2 text-sm text-gray-600">- هلن کلر</footer>
+                            </blockquote>
+                            <blockquote class="border-r-4 border-yellow-500 pr-4 italic text-gray-700">
+                                "کلمات البته قوی‌ترین داروی مورد استفاده بشر هستند."
+                                <footer class="mt-2 text-sm text-gray-600">- رودیارد کیپلینگ</footer>
+                            </blockquote>
+                            <blockquote class="border-r-4 border-yellow-500 pr-4 italic text-gray-700">
+                                "زبان خون روح است که افکار در آن جریان می‌یابند و از آن رشد می‌کنند."
+                                <footer class="mt-2 text-sm text-gray-600">- الیور وندل هلمز</footer>
+                            </blockquote>
+                        </div>
+                    </div>
+                </template>
+
+                <template x-if="modalContent === 'intro'">
+                    <div class="aspect-video bg-gray-200 rounded-lg flex items-center justify-center">
+                        <div class="text-center">
+                            <i data-lucide="play" class="w-16 h-16 text-primary-600 mx-auto"></i>
+                            <p class="mt-4 text-gray-600">ویدیو معرفی در اینجا پخش خواهد شد</p>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </div>
+    </div>
+
+    <!-- Script for Initializing Libraries and Animations -->
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Function to scroll to sections
+        function scrollToSection(sectionId) {
+            const target = document.querySelector(sectionId);
+            if (target) {
+                const headerOffset = 100;
+                const elementPosition = target.getBoundingClientRect().top;
+                const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+
+                gsap.to(window, {
+                    duration: 1,
+                    scrollTo: {y: offsetPosition, autoKill: false},
+                    ease: 'power2.inOut'
+                });
+            }
+        }
+
+        // Language update function
+        function updateLanguage() {
+            const language = localStorage.getItem('language') || 'fa';
+            document.documentElement.lang = language;
+            document.documentElement.dir = language === 'fa' ? 'rtl' : 'ltr';
+
+            // RTL-specific adjustments
+            if (language === 'fa') {
+                document.querySelectorAll('.text-left').forEach(el => {
+                    el.classList.remove('text-left');
+                    el.classList.add('text-right');
+                });
+                
+                // Additional RTL adjustments for specific elements
+                document.querySelectorAll('[dir="ltr"]').forEach(el => {
+                    el.setAttribute('dir', 'rtl');
+                });
+            } else {
+                document.querySelectorAll('.text-right').forEach(el => {
+                    el.classList.remove('text-right');
+                    el.classList.add('text-left');
+                });
+                
+                document.querySelectorAll('[dir="rtl"]').forEach(el => {
+                    el.setAttribute('dir', 'ltr');
+                });
+            }
+
+            // In a real implementation, you would update all text content based on language
+            console.log('Language changed to:', language);
+        }
+
+        // Newsletter subscription
+        function subscribeNewsletter(event) {
+            event.preventDefault();
+            const email = event.target.querySelector('input[type="email"]').value;
+
+            // In a real implementation, you would send this to your backend
+            console.log('Subscribing email:', email);
+
+            // Show success message
+            alert('از عضویت شما در خبرنامه ما متشکریم!');
+            event.target.reset();
+        }
+
+        // Mobile menu focus trap
+        function initMobileMenuTrap() {
+            const mobileMenu = document.querySelector('.mobile-nav-overlay');
+            const focusableElements = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+            let firstFocusableElement, lastFocusableElement;
+            
+            document.addEventListener('keydown', function(e) {
+                if (mobileMenu.classList.contains('active')) {
+                    if (e.key === 'Escape') {
+                        Alpine.$data(document.querySelector('body')).mobileMenuOpen = false;
+                        return;
+                    }
+                    
+                    if (e.key === 'Tab') {
+                        if (e.shiftKey) {
+                            if (document.activeElement === firstFocusableElement) {
+                                e.preventDefault();
+                                lastFocusableElement.focus();
+                            }
+                        } else {
+                            if (document.activeElement === lastFocusableElement) {
+                                e.preventDefault();
+                                firstFocusableElement.focus();
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+        // Lazy load video when in viewport
+        function lazyLoadVideo() {
+            const video = document.getElementById('hero-video');
+            const source = video.querySelector('source');
+            
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        source.src = source.dataset.src;
+                        video.load();
+                        observer.unobserve(video);
+                    }
+                });
+            }, { rootMargin: '200px 0px' });
+            
+            observer.observe(video);
+        }
+
+        // Throttle function for scroll events
+        function throttle(func, wait) {
+            let timeout = null;
+            let previous = 0;
+            
+            return function() {
+                const now = Date.now();
+                const remaining = wait - (now - previous);
+                
+                if (remaining <= 0 || remaining > wait) {
+                    if (timeout) {
+                        clearTimeout(timeout);
+                        timeout = null;
+                    }
+                    
+                    previous = now;
+                    func.apply(this, arguments);
+                } else if (!timeout) {
+                    timeout = setTimeout(() => {
+                        previous = Date.now();
+                        timeout = null;
+                        func.apply(this, arguments);
+                    }, remaining);
+                }
+            };
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Set initial language
+            updateLanguage();
+
+            // Initialize mobile menu trap
+            initMobileMenuTrap();
+
+            // Lazy load video
+            lazyLoadVideo();
+
+            // Animate hero text
+            gsap.to('.hero-gradient', {
+                backgroundPosition: '100% 50%',
+                duration: 10,
+                ease: 'none',
+                repeat: -1,
+                yoyo: true
+            });
+
+            // Animate elements on scroll with GSAP
+            gsap.utils.toArray('[data-aos]').forEach(el => {
+                gsap.fromTo(el, 
+                    { opacity: 0, y: 50 },
+                    {
+                        opacity: 1, 
+                        y: 0,
+                        duration: 0.8,
+                        scrollTrigger: {
+                            trigger: el,
+                            start: 'top 85%',
+                            toggleActions: 'play none none none'
+                        }
+                    }
+                );
+            });
+
+            // Animate floating shapes
+            gsap.to('.floating-shape-1', {
+                y: 20,
+                rotation: 5,
+                duration: 5,
+                repeat: -1,
+                yoyo: true,
+                ease: 'power1.inOut'
+            });
+
+            gsap.to('.floating-shape-2', {
+                y: -20,
+                rotation: -5,
+                duration: 6,
+                repeat: -1,
+                yoyo: true,
+                ease: 'power1.inOut'
+            });
+
+            // Add parallax effect to hero elements
+            document.addEventListener('mousemove', throttle(function(e) {
+                const xAxis = (window.innerWidth / 2 - e.pageX) / 25;
+                const yAxis = (window.innerHeight / 2 - e.pageY) / 25;
+
+                const shapes = document.querySelectorAll('.floating-shape');
+                shapes.forEach(shape => {
+                    shape.style.transform = `translate(${xAxis}px, ${yAxis}px)`;
+                });
+            }, 100));
+        });
+    </script>
+</body>
+</html>
